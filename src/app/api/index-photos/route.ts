@@ -3,7 +3,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { crawlDirectory } from '@/lib/crawler';
 import { extractMetadata } from '@/lib/metadata';
-import { createPhotoIndex, indexByTime, indexByLocation, getFolderStats } from '@/lib/indexer';
+import { createPhotoIndex, indexByTime, indexByLocation, getFolderStats, flattenTimeIndex } from '@/lib/indexer';
+import { getPhotos, setPhotos, getFolderPath } from '@/lib/photoStore';
+
+export async function GET() {
+  // Return the current index data
+  const photos = getPhotos();
+  
+  if (photos.length === 0) {
+    return NextResponse.json({ error: 'No photos indexed yet' }, { status: 404 });
+  }
+
+  const timeIndex = indexByTime(photos);
+  const flattenedTime = flattenTimeIndex(timeIndex);
+  const folderPath = getFolderPath();
+
+  // Get a thumbnail URL for each photo
+  const photosWithThumbnails = photos.map((photo, index) => ({
+    ...photo,
+    id: index.toString(),
+    thumbnailUrl: `/api/photo/thumbnail?path=${encodeURIComponent(photo.filePath)}`,
+    fullUrl: `/api/photo/full?path=${encodeURIComponent(photo.filePath)}`
+  }));
+
+  return NextResponse.json({
+    folderPath,
+    totalPhotos: photos.length,
+    photos: photosWithThumbnails,
+    timeIndex: flattenedTime,
+    stats: getFolderStats(photos)
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,6 +81,9 @@ export async function POST(request: NextRequest) {
     const timeIndex = indexByTime(photos);
     const locationIndex = indexByLocation(photos);
     const stats = getFolderStats(photos);
+
+    // Store photos in the shared store for later retrieval
+    setPhotos(photos, folderPath);
 
     return NextResponse.json({
       success: true,

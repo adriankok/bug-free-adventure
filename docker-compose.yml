@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  photo-indexer:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - photos:/app/photos
+    environment:
+      - NODE_ENV=production
+
+volumes:
+  photos:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /path/to/your/photos
