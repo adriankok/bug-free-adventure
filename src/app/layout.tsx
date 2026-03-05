@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "Photo Indexer",
+  description: "Index and organize your photos by time and location. Supports RAW, HEIC, and JPG formats.",
 };
 
 export default function RootLayout({
