@@ -2,9 +2,9 @@
 
 ## Current State
 
-**App Status**: ✅ Photo Indexer Built
+**App Status**: ✅ Photo Indexer with Gallery Built
 
-A Next.js photo indexing application that extracts metadata from RAW, HEIC, and JPG files, organizing photos by time and location.
+A Next.js photo indexing application that extracts metadata from RAW, HEIC, and JPG files, organizing photos by time and location. Now includes Docker deployment support, thumbnail generation, and a photo gallery.
 
 ## Recently Completed
 
@@ -21,20 +21,35 @@ A Next.js photo indexing application that extracts metadata from RAW, HEIC, and 
   - [x] Index by location (country/state/city)
   - [x] UI for folder selection
   - [x] Stats display (total, RAW, JPG, HEIC counts)
+- [x] Docker deployment:
+  - [x] Dockerfile for containerized deployment
+  - [x] docker-compose.yml with volume mounting
+  - [x] Next.js standalone output configuration
+- [x] Gallery features:
+  - [x] Thumbnail generation with sharp
+  - [x] Dashboard with dynamic photo count
+  - [x] Photo gallery organized by year/month
+  - [x] Photo detail page with full metadata
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Main UI with folder selection and views | ✅ Ready |
+| `src/app/page.tsx` | Main UI with gallery and dashboard | ✅ Ready |
 | `src/app/layout.tsx` | Root layout | ✅ Ready |
 | `src/app/globals.css` | Global styles | ✅ Ready |
-| `src/app/api/index-photos/route.ts` | API endpoint for indexing | ✅ Ready |
+| `src/app/api/index-photos/route.ts` | API endpoint for indexing & fetching | ✅ Ready |
+| `src/app/api/photo/thumbnail/route.ts` | Thumbnail generation API | ✅ Ready |
+| `src/app/api/photo/full/route.ts` | Full-size photo serving | ✅ Ready |
+| `src/app/api/photo/[id]/route.ts` | Photo detail API | ✅ Ready |
+| `src/app/photo/[id]/page.tsx` | Photo detail page | ✅ Ready |
 | `src/lib/types.ts` | TypeScript types for photo metadata | ✅ Ready |
 | `src/lib/crawler.ts` | File system crawler | ✅ Ready |
 | `src/lib/metadata.ts` | Metadata extraction (EXIF/XMP) | ✅ Ready |
 | `src/lib/indexer.ts` | Photo indexing by time/location | ✅ Ready |
-| `src/lib/usePhotoIndexer.ts` | React state management | ✅ Ready |
+| `src/lib/photoStore.ts` | Shared photo store for API routes | ✅ Ready |
+| `Dockerfile` | Docker container configuration | ✅ Ready |
+| `docker-compose.yml` | Docker Compose with volume mounting | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
 
 ## Supported Formats
@@ -73,24 +88,33 @@ A Next.js photo indexing application that extracts metadata from RAW, HEIC, and 
 
 ## Current Focus
 
-The app is complete and ready to use. Enter a folder path to index photos.
+The app is complete with gallery support. Enter a folder path to index photos, view thumbnails, and click on any photo to see its full metadata.
 
 ## Usage
 
-1. Open the app in browser
-2. Enter the path to your photo folder (e.g., `/home/user/Pictures`)
-3. Click "Start Indexing"
-4. View photos by Time or Location using the toggle buttons
+### Local Development
+1. Run `bun install` to install dependencies
+2. Run `bun dev` to start the development server
+3. Open http://localhost:3000
+4. Enter a folder path to index photos
+
+### Docker Deployment
+1. Build the container: `docker build -t photo-indexer .`
+2. Edit `docker-compose.yml` to set your photo path:
+   ```yaml
+   volumes:
+     - /path/to/your/photos:/app/photos
+   ```
+3. Run `docker-compose up -d`
+4. Open http://localhost:3000
 
 ## Dependencies
 
 - `exifr` - EXIF metadata extraction
-- `sharp` - Image processing (optional, for thumbnail generation)
+- `sharp` - Image processing for thumbnails
 
 ## Pending Improvements
 
-- [ ] Add thumbnail generation
-- [ ] Add photo preview
 - [ ] Add filtering options
 - [ ] Add export functionality
 - [ ] Add search functionality
@@ -101,3 +125,4 @@ The app is complete and ready to use. Enter a folder path to index photos.
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-03-05 | Built Photo Indexer app with metadata extraction |
+| 2026-03-05 | Added Docker deployment, thumbnail generation, and gallery UI |
