@@ -25,11 +25,7 @@ A Next.js photo indexing application that extracts metadata from RAW, HEIC, and 
   - [x] Dockerfile for containerized deployment
   - [x] docker-compose.yml with volume mounting
   - [x] Next.js standalone output configuration
-- [x] Gallery features:
-  - [x] Thumbnail generation with sharp
-  - [x] Dashboard with dynamic photo count
-  - [x] Photo gallery organized by year/month
-  - [x] Photo detail page with full metadata
+- [x] Refactored homepage to be dashboard-first: removed folder path input and indexing button. Now shows photo count prominently as landing page with stats and thumbnails below.
 
 ## Current Structure
 
