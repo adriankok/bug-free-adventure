@@ -16,4 +16,5 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /path/to/your/photos
+      device: /Users/adriankok/nas_photos/Photos-raw
+  
